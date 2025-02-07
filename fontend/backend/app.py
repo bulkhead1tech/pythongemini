@@ -8,6 +8,9 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
   
     
 recognizer = sr.Recognizer()
+@app.route("/")
+def start():
+    return "server running"
 
 def convert_voice_to_text(audio):    
     try:
@@ -64,6 +67,3 @@ async def upload_audio():
             return jsonify({"error": "No text detected"}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-if __name__ == "__main__":
-    app.run(debug=True)
