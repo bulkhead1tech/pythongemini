@@ -75,4 +75,5 @@ def upload_audio():
         else:
             return jsonify({"error": "No text detected"}), 400
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        import traceback
+        return jsonify({"error": str(e), "result":traceback.format_exc()}), 500
