@@ -5,6 +5,7 @@ from io import BytesIO
 from flask_cors import CORS
 app = Flask(__name__)   # Flask constructor 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
+app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
   
     
 recognizer = sr.Recognizer()
