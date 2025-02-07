@@ -54,7 +54,7 @@ def scam_detection(conversation_text, alert_level="medium"):
     return(response.text)
 
 @app.route('/api/mich', methods=['POST'])
-async def upload_audio():
+def upload_audio():
     if 'file' not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
 
