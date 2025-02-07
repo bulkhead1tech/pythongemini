@@ -3,6 +3,8 @@ import google.generativeai as genai
 from flask import Flask, request, jsonify
 from io import BytesIO   
 from flask_cors import CORS
+from pydub import AudioSegment 
+
 app = Flask(__name__)   # Flask constructor 
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.config['MAX_CONTENT_LENGTH'] = 16*1024*1024
@@ -12,7 +14,13 @@ recognizer = sr.Recognizer()
 @app.route("/")
 def start():
     return "server running"
-
+  
+def mpconv(audio):
+    new_audio = AudioSegment.from_mp3(audio)
+    wav_io = BytesIO()
+    new_audio.export(wav_io, format="wav")
+    wav_io.seek(0)
+    return wav_io
 def convert_voice_to_text(audio):    
     try:
         text_hi = recognizer.recognize_google(audio, language="hi-IN")
@@ -31,7 +39,6 @@ def convert_voice_to_text(audio):
 
 
 def scam_detection(conversation_text, alert_level="medium"):
-    # Initialize the genai API with your api_key
     genai.configure(api_key="AIzaSyCGx3cDeTHgIU9nw7gxZre0gPoa1wgUY_A")
     model = genai.GenerativeModel("gemini-1.5-flash")
 
@@ -56,7 +63,8 @@ async def upload_audio():
         return jsonify({"error": "No file selected"}), 400
 
     try:
-        audio = sr.AudioFile(BytesIO(file.read()))
+        input_audio= mpconv(file)
+        audio = sr.AudioFile(BytesIO(input_audio.read()))
         with audio as source:
             print("listening...")
             audio_data = recognizer.record(source)
