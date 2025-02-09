@@ -39,7 +39,7 @@ def convert_voice_to_text(audio):
 
 
 def scam_detection(conversation_text, alert_level="medium"):
-    genai.configure(api_key="AIzaSyCGx3cDeTHgIU9nw7gxZre0gPoa1wgUY_A")
+    genai.configure(api_key="")
     model = genai.GenerativeModel("gemini-1.5-flash")
 
     response = model.generate_content(
